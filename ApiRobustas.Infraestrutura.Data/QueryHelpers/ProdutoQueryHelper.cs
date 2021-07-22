@@ -29,7 +29,7 @@ namespace ApiRobustas.Infraestrutura.Data.QueryHelpers
         public static string ListarProdutosPorCategoria()
         {
             var query = new StringBuilder();
-            query.AppendLine(" SELECT  p.[ID], p.[NOME], p.[DESCRICAO],c.[NOME] as Categoria");
+            query.AppendLine(" SELECT  p.[ID], p.[NOME], p.[DESCRICAO],c.[NOME] as Categoria,");
             query.AppendLine(" p.[PRECO],p.[QUANTIDADE]");
             query.AppendLine(" FROM PRODUTO p JOIN CATEGORIA c ON p.[id_Categoria] = c.[ID]");
             query.AppendLine(" WHERE c.[ID] = @categoriaId");

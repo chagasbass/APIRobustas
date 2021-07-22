@@ -3,6 +3,7 @@ using ApiRobustas.Api.Infraestrutura.Autenticacao.Configuracoes;
 using ApiRobustas.Api.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,6 +25,7 @@ namespace ApiRobustas.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.VersionarApi();
             services.ConfigurarSwagger();
             services.AddMemoryCache();
             services.AddGlobalExceptionHandlerMiddleware();
@@ -39,7 +41,7 @@ namespace ApiRobustas.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
             app.UseResponseCompression();
 
@@ -47,16 +49,25 @@ namespace ApiRobustas.Api
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiRobustas.Api v1"));
+
+                // app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiRobustas.Api v1"));
+
+                //Add as versões existentes dos endpoints no swagger
+                app.UseSwaggerUI(options =>
+                {
+                    foreach (var description in provider.ApiVersionDescriptions)
+                    {
+                        options.SwaggerEndpoint(
+                            $"/swagger/{description.GroupName}/swagger.json",
+                            description.GroupName.ToUpperInvariant());
+                    }
+                });
             }
 
             app.UseCors(x =>
            x.AllowAnyOrigin()
           .AllowAnyMethod()
           .AllowAnyHeader());
-
-            app.UseRequestLogConfiguration();
-            app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
             app.UseHttpsRedirection();
             app.UseRouting();
@@ -66,6 +77,9 @@ namespace ApiRobustas.Api
 
             app.UseHealthChecks();
             app.UserHealthCheckUi();
+
+            app.UseRequestLogConfiguration();
+            app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

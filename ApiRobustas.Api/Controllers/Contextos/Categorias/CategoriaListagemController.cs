@@ -13,12 +13,15 @@ namespace ApiRobustas.Api.Controllers.Contextos.Categorias
     /// </summary>
     [ApiController]
     [Route("v1/categorias")]
+    [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = "v1")]
     public class CategoriaListagemController : ControllerBase
     {
         /// <summary>
         /// Efetua a listagem das categorias
         /// </summary>
         [HttpGet("")]
+        [MapToApiVersion("1.0")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status404NotFound)]
@@ -39,6 +42,7 @@ namespace ApiRobustas.Api.Controllers.Contextos.Categorias
         /// Efetua a listagem das categorias por um id Informado
         /// </summary> 
         [HttpGet("{id}")]
+        [MapToApiVersion("1.0")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status404NotFound)]

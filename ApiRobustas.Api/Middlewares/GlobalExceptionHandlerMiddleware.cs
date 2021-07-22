@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace ApiRobustas.Api.Middlewares
 {
+    /// <summary>
+    /// Middleware de para capturar Exceções Globais
+    /// </summary>
     public class GlobalExceptionHandlerMiddleware : IMiddleware
     {
         private readonly ILogger<GlobalExceptionHandlerMiddleware> _logger;
@@ -25,13 +28,13 @@ namespace ApiRobustas.Api.Middlewares
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Erro inesperado: {ex}");
+                _logger.LogError($"Erro inesperado: {ex} - inner:{ex?.InnerException?.Message}");
 
                 await HandleExceptionAsync(context, ex);
             }
         }
 
-        public Task HandleExceptionAsync(HttpContext context, Exception exception)
+        public async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             const int statusCode = StatusCodes.Status500InternalServerError;
 
@@ -48,7 +51,8 @@ namespace ApiRobustas.Api.Middlewares
                 Titulo = "Erro Inesperado",
                 CodigoHttp = statusCode,
                 Detalhe = $"StackTrace:{exception.StackTrace} - Inner - {exception.InnerException}",
-                Instancia = exception.Message
+                Instancia = exception.Message,
+                Tipo = exception.StackTrace
             };
 
             _logger.LogInformation($"Erro na aplicação", logDeErro);
@@ -58,7 +62,7 @@ namespace ApiRobustas.Api.Middlewares
             context.Response.StatusCode = statusCode;
             context.Response.ContentType = detalhesDoProblema.TipoDeDado;
 
-            return context.Response.WriteAsync(JsonSerializer.Serialize(comandoResultado));
+            await context.Response.WriteAsync(JsonSerializer.Serialize(comandoResultado));
         }
     }
 }

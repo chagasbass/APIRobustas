@@ -12,7 +12,9 @@ namespace ApiRobustas.Api.Controllers.Contextos.Produtos
     /// <summary>
     /// Controller de listagem de produtos
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("v1/produtos")]
+    [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
     public class ProdutoListagemController : ControllerBase
     {
@@ -30,6 +32,7 @@ namespace ApiRobustas.Api.Controllers.Contextos.Produtos
         /// Efetua a listagem dos Produtos usando Cache
         /// </summary>
         [HttpGet("{usuarioId}")]
+        [MapToApiVersion("1.0")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status404NotFound)]
@@ -50,6 +53,7 @@ namespace ApiRobustas.Api.Controllers.Contextos.Produtos
         /// Efetua a listagem dos Produtos por categoria
         /// </summary>
         [HttpGet("{categoriaId}/categoria")]
+        [MapToApiVersion("1.0")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status404NotFound)]

@@ -12,6 +12,8 @@ namespace ApiRobustas.Api.Controllers.Contextos.Usuarios
     /// Representa o Endpoint de usuários
     /// </summary>
     [Route("v1/usuarios")]
+    [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
     public class UsuarioController : ControllerBase
     {
@@ -28,6 +30,7 @@ namespace ApiRobustas.Api.Controllers.Contextos.Usuarios
         /// <param name="cadastrarUsuarioComando">objeto contendo os dados para cadastro do usuário</param>
         /// <returns>Retorna um objeto do tipo ComandoResultado</returns>
         [HttpPost("")]
+        [MapToApiVersion("1.0")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status400BadRequest)]

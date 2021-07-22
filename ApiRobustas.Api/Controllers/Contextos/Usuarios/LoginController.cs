@@ -13,6 +13,8 @@ namespace ApiRobustas.Api.Controllers.Contextos.Usuarios
     /// Endpoint de login
     /// </summary>
     [Route("v1/login")]
+    [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
     public class LoginController : ControllerBase
     {
@@ -29,6 +31,7 @@ namespace ApiRobustas.Api.Controllers.Contextos.Usuarios
         /// <param name="efetuarLoginComando">objeto contendo os dados para login</param>
         /// <returns>Retorna um objeto do tipo ComandoResultado</returns>
         [HttpPost("")]
+        [MapToApiVersion("1.0")]
         [AllowAnonymous]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status200OK)]

@@ -2,6 +2,7 @@
 using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace ApiRobustas.Api.Configuracoes
@@ -17,9 +18,17 @@ namespace ApiRobustas.Api.Configuracoes
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "ApiRobustas",
+                    Title = "ApiRobustas Versão 1",
                     Version = "v1"
                 });
+
+                //c.SwaggerDoc("v2", new OpenApiInfo
+                //{
+                //    Version = "v2",
+                //    Title = "API Robustas Versão 2",
+                //});
+
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 
                 #region Inserindo Autenticação Bearer no swagger
                 var securitySchema = new OpenApiSecurityScheme

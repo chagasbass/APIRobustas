@@ -12,6 +12,8 @@ namespace ApiRobustas.Api.Controllers.Contextos.Produtos
     /// COntroller de Produtos
     /// </summary>
     [Route("v1/produtos")]
+    [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
     public class ProdutoController : ControllerBase
     {
@@ -29,6 +31,7 @@ namespace ApiRobustas.Api.Controllers.Contextos.Produtos
         /// <returns></returns>
         //[Authorize]
         [HttpPost("")]
+        [MapToApiVersion("1.0")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status400BadRequest)]
@@ -49,6 +52,7 @@ namespace ApiRobustas.Api.Controllers.Contextos.Produtos
         /// <returns>retorna um objeto do tipo ComandoResultado</returns>
         //[Authorize]
         [HttpPut("")]
+        [MapToApiVersion("1.0")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status400BadRequest)]

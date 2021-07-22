@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 namespace ApiRobustas.Api.Controllers.Contextos.Categorias
 {
     [Route("v1/categorias")]
+    [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
     public class CategoriaController : ControllerBase
     {
@@ -23,6 +25,7 @@ namespace ApiRobustas.Api.Controllers.Contextos.Categorias
         /// Efetua o cadastro das categorias
         /// </summary>
         [HttpPost("")]
+        [MapToApiVersion("1.0")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status400BadRequest)]
