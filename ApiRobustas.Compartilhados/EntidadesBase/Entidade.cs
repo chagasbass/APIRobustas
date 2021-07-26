@@ -39,7 +39,7 @@ namespace ApiRobustas.Compartilhados.EntidadesBase
 
         public static bool operator ==(Entidade a, Entidade b)
         {
-            if (a is not null || !ReferenceEquals(b, null))
+            if (a is not null || b is not null)
             {
                 if (ReferenceEquals(a, null) || ReferenceEquals(b, null))
                     return false;

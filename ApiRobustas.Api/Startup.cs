@@ -28,6 +28,7 @@ namespace ApiRobustas.Api
             services.VersionarApi();
             services.ConfigurarSwagger();
             services.AddMemoryCache();
+            services.ResolverDependenciasDeLog();
             services.AddGlobalExceptionHandlerMiddleware();
             services.AddHttpClient();
             services.ConfigureOptionPatternObjects(Configuration);
@@ -80,7 +81,7 @@ namespace ApiRobustas.Api
             app.UseHealthChecks();
             app.UserHealthCheckUi();
 
-            app.UseRequestLogConfiguration();
+            //app.UseRequestLogConfiguration();
             app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>

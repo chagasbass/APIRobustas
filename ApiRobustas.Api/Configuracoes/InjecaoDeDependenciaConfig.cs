@@ -32,16 +32,19 @@ namespace ApiRobustas.Api.Configuracoes
     /// </summary>
     public static class InjecaoDeDependenciaConfig
     {
+
+        public static void ResolverDependenciasDeLog(this IServiceCollection services)
+        {
+            //servico de log
+            services.AddSingleton<ILogServico, LogServico>();
+            services.AddSingleton<InformacaoLog>();
+        }
         public static void ResolverDependenciasDaAplicacao(this IServiceCollection services)
         {
             /*Scoped -> 1 vez por para todas as dependencias req
              *Transient ->  toda vez q tiver dependencia é criado novamente
              *Sigleton -> Uma única vez até a aplicação morrer
              */
-
-            //servico de log
-            services.AddSingleton<ILogServico, LogServico>();
-            services.AddSingleton<InformacaoLog>();
 
             //servicos de autenticacao
             services.AddScoped<ITokenServico, TokenServico>();

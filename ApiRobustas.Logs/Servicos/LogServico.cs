@@ -19,6 +19,8 @@ namespace ApiRobustas.Logs.Servicos
             _logger.Information($"[TimeStamp]:{InformacaoLog.Timestamp}");
             _logger.Information($"[Usuario]: {InformacaoLog.Usuario ?? "Usuário não está logado."}");
             _logger.Information($"[ExternalUri]: { InformacaoLog.ExternalUri ?? "Sem Uri"}");
+            _logger.Information($"[Endpoint]: { InformacaoLog.Endpoint}");
+            _logger.Information($"[Controller]: { InformacaoLog.Controller}");
             _logger.Information($"[RequestQueryParams]: { InformacaoLog.RequestQueryParams ?? "Sem parametros"}");
             _logger.Information($"[ExternalRequestBody]: { InformacaoLog.ExternalRequestBody ?? "Sem body na requisição externa"}");
             _logger.Information($"[ExternalQueryParams]: { InformacaoLog.ExternalQueryParams ?? "Sem parâmetros na requisição externa"}");

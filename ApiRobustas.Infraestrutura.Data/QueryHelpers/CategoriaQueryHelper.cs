@@ -15,7 +15,7 @@ namespace ApiRobustas.Infraestrutura.Data.QueryHelpers
         public static string ListarCategoriasPorId()
         {
             var query = new StringBuilder();
-            query.AppendLine(" SELECT ID, NOME FROM CATEGORIA ORDER BY NOME ASC");
+            query.AppendLine(" SELECT ID, NOME FROM CATEGORIA");
             query.AppendLine(" WHERE ID = @id");
 
             return query.ToString();

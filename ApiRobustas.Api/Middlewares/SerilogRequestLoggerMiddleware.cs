@@ -1,7 +1,9 @@
 ﻿using ApiRobustas.Logs.Servicos;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,22 +29,20 @@ namespace ApiRobustas.Api.Middlewares
         /// Efetua a leitura do HttpContext para recuperar as informações de request e response para os logs
         /// da aplicação.
         /// </summary>
-        /// <param name="httpContext"></param>
+        /// <param name="context"></param>
         /// <returns></returns>
-        public async Task Invoke(HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext context)
         {
-            if (httpContext == null) throw new ArgumentNullException(nameof(httpContext));
-
             //efetuando a leitura do request pois ele vem como um stream.
-            string requestBody = await GetRequestBodyAsync(httpContext);
+            string requestBody = await GetRequestBodyAsync(context);
 
-            var originalResponseBodyReference = httpContext.Response.Body;
+            var originalResponseBodyReference = context.Response.Body;
 
             using var responseBodyMemoryStream = new MemoryStream();
 
-            var responseBody = await GetResponseBodyAsync(httpContext, responseBodyMemoryStream);
+            var responseBody = await GetResponseBodyAsync(context, responseBodyMemoryStream);
 
-            CreateLogInformation(requestBody, responseBody, httpContext);
+            CreateLogInformation(requestBody, responseBody, context);
 
             await responseBodyMemoryStream.CopyToAsync(originalResponseBodyReference);
         }
@@ -93,15 +93,34 @@ namespace ApiRobustas.Api.Middlewares
         /// <param name="httpContext"></param>
         private void CreateLogInformation(string requestBody, string responseBody, HttpContext httpContext)
         {
+            GetRequestQueryParams(httpContext);
+
             _logServico.InformacaoLog.Method = httpContext.Request.Method;
             _logServico.InformacaoLog.RequestUri = httpContext.GetEndpoint()?.DisplayName ?? "";
             _logServico.InformacaoLog.RequestBody = requestBody ?? "Requisição sem body";
             _logServico.InformacaoLog.ResponseBody = responseBody;
-            _logServico.InformacaoLog.RequestQueryParams = httpContext.Request.Query.ToString();
             _logServico.InformacaoLog.TraceId = httpContext.TraceIdentifier;
             _logServico.InformacaoLog.Usuario = httpContext.User.Identity.Name;
 
             _logServico.EscreverLog();
+        }
+
+        /// <summary>
+        /// Recupera os parametros de rota da aplicação
+        /// </summary>
+        /// <param name="context"></param>
+        private void GetRequestQueryParams(HttpContext context)
+        {
+            var queryParams = context.GetRouteData();
+
+            if (!queryParams.Values.Any())
+                return;
+
+            var values = queryParams.Values.ToList();
+
+            _logServico.InformacaoLog.Endpoint = $"{values[0].Key} - {values[0].Value}";
+            _logServico.InformacaoLog.Controller = $"{values[1].Key} - {values[1].Value}";
+            _logServico.InformacaoLog.RequestQueryParams = $"{values[2].Key} - {values[2].Value}";
         }
     }
 }

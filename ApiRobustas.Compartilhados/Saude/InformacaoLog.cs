@@ -7,6 +7,8 @@ namespace ApiRobustas.Compartilhados.Saude
     /// </summary>
     public class InformacaoLog
     {
+        public string Endpoint { get; set; }
+        public string Controller { get; set; }
         public string RequestUri { get; set; }
         public string Usuario { get; set; }
         public string RequestBody { get; set; }
