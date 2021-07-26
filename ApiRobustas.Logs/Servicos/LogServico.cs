@@ -1,7 +1,8 @@
 ﻿using ApiRobustas.Compartilhados.Saude;
 using Serilog;
+using System;
 
-namespace ApiRobustas.Logs.Servicos
+namespace ApiRobustas.Infraestrutura.Logs.Servicos
 {
     public class LogServico : ILogServico
     {
@@ -17,6 +18,7 @@ namespace ApiRobustas.Logs.Servicos
         public void EscreverLog()
         {
             _logger.Information($"[TimeStamp]:{InformacaoLog.Timestamp}");
+            _logger.Information($"[IpAddress]:{InformacaoLog.IpAddress.ToString()} ?? Não informado");
             _logger.Information($"[Usuario]: {InformacaoLog.Usuario ?? "Usuário não está logado."}");
             _logger.Information($"[ExternalUri]: { InformacaoLog.ExternalUri ?? "Sem Uri"}");
             _logger.Information($"[Endpoint]: { InformacaoLog.Endpoint}");
@@ -31,6 +33,15 @@ namespace ApiRobustas.Logs.Servicos
             _logger.Information($"[StatusCode]: {InformacaoLog.ResponseStatusCode}");
             _logger.Information($"[TraceId]:{InformacaoLog.TraceId}");
             _logger.Information($"[RequestUriParams]:{InformacaoLog.RequestQueryParams}");
+        }
+
+        public void EscreverLogDeErros(Exception exception)
+        {
+            _logger.Error($"[Exception]:{exception.GetType().Name}");
+            _logger.Error($"[Message]:{exception.Message}");
+            _logger.Error($"[ExceptionStackTrace]:{exception.StackTrace}");
+            _logger.Error($"[InnerException]:{exception?.InnerException.Message}");
+            _logger.Error($"[Stack Chamadas]:{Environment.StackTrace }");
         }
     }
 }

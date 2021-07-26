@@ -1,8 +1,8 @@
 ﻿using ApiRobustas.Compartilhados.Configuracoes;
 using ApiRobustas.Dominio.Contextos.Usuarios.Queries;
 using ApiRobustas.Dominio.Contextos.Usuarios.ServiçosExternos;
+using ApiRobustas.Infraestrutura.Logs.Servicos;
 using ApiRobustas.Infraestrutura.ServicosExternos.Servicos;
-using ApiRobustas.Logs.Servicos;
 using Microsoft.Extensions.Options;
 using System.Net.Http;
 using System.Text.Json;

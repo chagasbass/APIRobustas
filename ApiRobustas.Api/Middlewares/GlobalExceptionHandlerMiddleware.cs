@@ -1,5 +1,6 @@
 ﻿using ApiRobustas.Compartilhados.ComandosBase;
 using ApiRobustas.Compartilhados.DetalhesDosProblemas;
+using ApiRobustas.Infraestrutura.Logs.Servicos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,10 +15,13 @@ namespace ApiRobustas.Api.Middlewares
     public class GlobalExceptionHandlerMiddleware : IMiddleware
     {
         private readonly ILogger<GlobalExceptionHandlerMiddleware> _logger;
+        private readonly ILogServico _logServico;
 
-        public GlobalExceptionHandlerMiddleware(ILogger<GlobalExceptionHandlerMiddleware> logger)
+        public GlobalExceptionHandlerMiddleware(ILogger<GlobalExceptionHandlerMiddleware> logger,
+                                                ILogServico logServico)
         {
             _logger = logger;
+            _logServico = logServico;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -28,12 +32,16 @@ namespace ApiRobustas.Api.Middlewares
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Erro inesperado: {ex} - inner:{ex?.InnerException?.Message}");
-
                 await HandleExceptionAsync(context, ex);
             }
         }
 
+        /// <summary>
+        /// Responsavel por tratar as exceções geradas na aplicação
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="exception"></param>
+        /// <returns></returns>
         public async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             const int statusCode = StatusCodes.Status500InternalServerError;
@@ -46,16 +54,7 @@ namespace ApiRobustas.Api.Middlewares
                 Instancia = exception.Message
             };
 
-            var logDeErro = new DetalhesDoProblema()
-            {
-                Titulo = "Erro Inesperado",
-                CodigoHttp = statusCode,
-                Detalhe = $"StackTrace:{exception.StackTrace} - Inner - {exception.InnerException}",
-                Instancia = exception.Message,
-                Tipo = exception.StackTrace
-            };
-
-            _logger.LogInformation($"Erro na aplicação", logDeErro);
+            _logServico.EscreverLogDeErros(exception);
 
             var comandoResultado = new ComandoResultado(false, "erro na aplicação", detalhesDoProblema);
 

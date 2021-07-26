@@ -13,7 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ApiRobustas.Compartilhados\ApiRobustas.Compartilhados.csproj" />
     <ProjectReference Include="..\ApiRobustas.Dominio\ApiRobustas.Dominio.csproj" />
-    <ProjectReference Include="..\ApiRobustas.Logs\ApiRobustas.Logs.csproj" />
+    <ProjectReference Include="..\ApiRobustas.Logs\ApiRobustas.Infraestrutura.Logs.csproj" />
   </ItemGroup>
 
 </Project>

@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiRobustas.Infraestrutura.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiRobustas.Testes", "ApiRobustas.Testes\ApiRobustas.Testes.csproj", "{B2A29E68-DEEB-40B3-8BF5-25C7C62BC99B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiRobustas.Logs", "ApiRobustas.Logs\ApiRobustas.Logs.csproj", "{33385A11-8788-4108-952C-F65ECEC7E4F5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiRobustas.Infraestrutura.Logs", "ApiRobustas.Logs\ApiRobustas.Infraestrutura.Logs.csproj", "{33385A11-8788-4108-952C-F65ECEC7E4F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

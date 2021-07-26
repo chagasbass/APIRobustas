@@ -33,5 +33,7 @@ namespace ApiRobustas.Dominio.Contextos.Categorias.Entidades
                 .IsNotNullOrEmpty(Descricao, nameof(Descricao), MensagensDeCategoria.DescricaoNaoPreenchida)
                 .IsNotMaxValue(Nome.Length, nameof(Nome), MensagensDeCategoria.DescricaoInvalida));
         }
+
+        public override string ToString() => $"Id: {Id} Nome: {Nome}";
     }
 }

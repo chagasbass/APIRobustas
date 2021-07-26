@@ -1,6 +1,7 @@
 ﻿using ApiRobustas.Compartilhados.Saude;
+using System;
 
-namespace ApiRobustas.Logs.Servicos
+namespace ApiRobustas.Infraestrutura.Logs.Servicos
 {
     /// <summary>
     /// Interface para os serviços de Log
@@ -9,5 +10,6 @@ namespace ApiRobustas.Logs.Servicos
     {
         InformacaoLog InformacaoLog { get; set; }
         void EscreverLog();
+        void EscreverLogDeErros(Exception exception);
     }
 }

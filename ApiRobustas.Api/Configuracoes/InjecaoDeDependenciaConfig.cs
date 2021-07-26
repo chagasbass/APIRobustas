@@ -16,10 +16,10 @@ using ApiRobustas.Infraestrutura.Data.Contextos.Produtos.Repositorios;
 using ApiRobustas.Infraestrutura.Data.Contextos.Usuarios.Repositorios;
 using ApiRobustas.Infraestrutura.Data.ContextosDeDados;
 using ApiRobustas.Infraestrutura.Data.UnidadesDeTrabalho;
+using ApiRobustas.Infraestrutura.Logs.Servicos;
 using ApiRobustas.Infraestrutura.ServicosExternos.Configuracoes;
 using ApiRobustas.Infraestrutura.ServicosExternos.Externos;
 using ApiRobustas.Infraestrutura.ServicosExternos.Servicos;
-using ApiRobustas.Logs.Servicos;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -39,6 +39,7 @@ namespace ApiRobustas.Api.Configuracoes
             services.AddSingleton<ILogServico, LogServico>();
             services.AddSingleton<InformacaoLog>();
         }
+
         public static void ResolverDependenciasDaAplicacao(this IServiceCollection services)
         {
             /*Scoped -> 1 vez por para todas as dependencias req

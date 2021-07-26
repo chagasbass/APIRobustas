@@ -1,6 +1,7 @@
-﻿using ApiRobustas.Logs.Servicos;
+﻿using ApiRobustas.Infraestrutura.Logs.Servicos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Serilog;
 using System;
 using System.IO;
 using System.Linq;
@@ -14,12 +15,17 @@ namespace ApiRobustas.Api.Middlewares
     /// </summary>
     public class SerilogRequestLoggerMiddleware
     {
+
         private readonly RequestDelegate _next;
         private readonly ILogServico _logServico;
+        private readonly IDiagnosticContext _diagnosticContext;
 
-        public SerilogRequestLoggerMiddleware(RequestDelegate next, ILogServico logServico)
+        public SerilogRequestLoggerMiddleware(RequestDelegate next,
+                                              ILogServico logServico,
+                                              IDiagnosticContext diagnosticContext)
         {
             _logServico = logServico;
+            _diagnosticContext = diagnosticContext;
 
             if (next == null) throw new ArgumentNullException(nameof(next));
             _next = next;
@@ -95,6 +101,11 @@ namespace ApiRobustas.Api.Middlewares
         {
             GetRequestQueryParams(httpContext);
 
+            var endpoint = httpContext.GetEndpoint();
+            if (endpoint != null)
+                _logServico.InformacaoLog.Endpoint = endpoint.DisplayName;
+
+            _logServico.InformacaoLog.IpAddress = httpContext.Connection.RemoteIpAddress?.ToString() ?? "Ip não informado";
             _logServico.InformacaoLog.Method = httpContext.Request.Method;
             _logServico.InformacaoLog.RequestUri = httpContext.GetEndpoint()?.DisplayName ?? "";
             _logServico.InformacaoLog.RequestBody = requestBody ?? "Requisição sem body";
@@ -118,9 +129,10 @@ namespace ApiRobustas.Api.Middlewares
 
             var values = queryParams.Values.ToList();
 
-            _logServico.InformacaoLog.Endpoint = $"{values[0].Key} - {values[0].Value}";
             _logServico.InformacaoLog.Controller = $"{values[1].Key} - {values[1].Value}";
-            _logServico.InformacaoLog.RequestQueryParams = $"{values[2].Key} - {values[2].Value}";
+
+            if (values.Count > 2)
+                _logServico.InformacaoLog.RequestQueryParams = $"{values[2].Key} - {values[2].Value}";
         }
     }
 }

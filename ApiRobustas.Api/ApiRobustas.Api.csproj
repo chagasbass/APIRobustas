@@ -32,7 +32,7 @@
     <ProjectReference Include="..\ApiRobustas.Infraestrutura.Cache\ApiRobustas.Infraestrutura.Cache.csproj" />
     <ProjectReference Include="..\ApiRobustas.Infraestrutura.Data\ApiRobustas.Infraestrutura.Data.csproj" />
     <ProjectReference Include="..\ApiRobustas.Infraestrutura.ServicosExternos\ApiRobustas.Infraestrutura.ServicosExternos.csproj" />
-    <ProjectReference Include="..\ApiRobustas.Logs\ApiRobustas.Logs.csproj" />
+    <ProjectReference Include="..\ApiRobustas.Logs\ApiRobustas.Infraestrutura.Logs.csproj" />
   </ItemGroup>
 
 </Project>

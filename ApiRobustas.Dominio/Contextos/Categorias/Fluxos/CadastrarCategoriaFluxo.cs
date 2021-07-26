@@ -44,7 +44,7 @@ namespace ApiRobustas.Dominio.Contextos.Categorias.Fluxos
             await _categoriaRepositorio.SalvarCategoriaAsync(novaCategoria);
             await _unidadeDeTrabalho.CommitAsync();
 
-            return new ComandoResultado(true, "Categoria cadastrada com sucesso", new { Id = novaCategoria.Id });
+            return new ComandoResultado(true, "Categoria cadastrada com sucesso", novaCategoria.ToString());
         }
     }
 }
