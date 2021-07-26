@@ -61,7 +61,7 @@ namespace ApiRobustas.Dominio.Contextos.Categorias.Recursos {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a .
+        ///   Consulta uma cadeia de caracteres localizada semelhante a A descrição é Inválida.
         /// </summary>
         internal static string DescricaoInvalida {
             get {
@@ -70,7 +70,7 @@ namespace ApiRobustas.Dominio.Contextos.Categorias.Recursos {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a .
+        ///   Consulta uma cadeia de caracteres localizada semelhante a A descrição é obrigatória.
         /// </summary>
         internal static string DescricaoNaoPreenchida {
             get {
@@ -79,7 +79,7 @@ namespace ApiRobustas.Dominio.Contextos.Categorias.Recursos {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a .
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O nome é inválido.
         /// </summary>
         internal static string NomeInvalido {
             get {
@@ -88,7 +88,7 @@ namespace ApiRobustas.Dominio.Contextos.Categorias.Recursos {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a .
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O nome deve ser preenchido.
         /// </summary>
         internal static string NomeNaoPreenchido {
             get {

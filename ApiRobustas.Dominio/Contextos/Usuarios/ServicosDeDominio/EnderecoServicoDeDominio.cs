@@ -30,6 +30,9 @@ namespace ApiRobustas.Dominio.Contextos.Usuarios.ServicosDeDominio
 
             var enderecoExterno = await _enderecoServicoExterno.BuscarEnderecoPorCepAsync(cep);
 
+            if (string.IsNullOrEmpty(enderecoExterno.Cep))
+                return default;
+
             var novoEndereco = new Endereco(enderecoExterno.Cep, enderecoExterno.Logradouro, enderecoExterno.Bairro,
                enderecoExterno.Localidade, enderecoExterno.Uf);
 

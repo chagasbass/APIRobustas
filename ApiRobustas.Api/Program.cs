@@ -6,7 +6,6 @@ using Serilog.Core;
 using Serilog.Events;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace ApiRobustas.Api
 {
@@ -67,22 +66,28 @@ namespace ApiRobustas.Api
 
         private static Logger CreateLogger()
         {
-            var logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(_configurationForLogging)
-                .MinimumLevel.Debug()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Information)
-                .Enrich.FromLogContext()
-                .Enrich.WithMachineName()
-                .Filter.ByExcluding(c => c.Properties.Any(p => p.Value.ToString().Contains("healthcheck")))
-                .Filter.ByExcluding(c => c.Properties.Any(p => p.Value.ToString().Contains("healthcheck-ui")))
-                .Filter.ByExcluding(c => c.Properties.Any(p => p.Key.ToString().Contains("HealthChecksDb")))
-                .Filter.ByExcluding(c => c.Properties.Any(p => p.Key.ToString().Contains("HealthChecksUI")))
-                .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Information)
-                .Enrich.WithProperty("Environment", ENVIRONMENT)
-                .WriteTo.Seq(Environment.GetEnvironmentVariable("SEQ_URL") ?? LogServerUrl);
+            return new LoggerConfiguration()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+            .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Information)
+            .Enrich.FromLogContext()
+            .WriteTo.Console()
+            .CreateLogger();
 
-            return logger.CreateLogger();
+            //var logger = new LoggerConfiguration()
+            //    .ReadFrom.Configuration(_configurationForLogging)
+            //    .MinimumLevel.Debug()
+            //    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+            //    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Information)
+            //    .Enrich.FromLogContext()
+            //    .Enrich.WithMachineName()
+            //    .Filter.ByExcluding(c => c.Properties.Any(p => p.Value.ToString().Contains("healthcheck")))
+            //    .Filter.ByExcluding(c => c.Properties.Any(p => p.Value.ToString().Contains("healthcheck-ui")))
+            //    .Filter.ByExcluding(c => c.Properties.Any(p => p.Key.ToString().Contains("HealthChecksDb")))
+            //    .Filter.ByExcluding(c => c.Properties.Any(p => p.Key.ToString().Contains("HealthChecksUI")))
+            //    .Filter.ByExcluding(c => c.Properties.Any(p => p.Key.ToString().Contains("healthchecks-data-ui")))
+            //    .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Information)
+            //    .Enrich.WithProperty("Environment", ENVIRONMENT)
+            //    .WriteTo.Seq(Environment.GetEnvironmentVariable("SEQ_URL") ?? LogServerUrl);
         }
     }
 }

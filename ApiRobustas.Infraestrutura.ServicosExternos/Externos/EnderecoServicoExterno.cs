@@ -2,6 +2,7 @@
 using ApiRobustas.Dominio.Contextos.Usuarios.Queries;
 using ApiRobustas.Dominio.Contextos.Usuarios.ServiçosExternos;
 using ApiRobustas.Infraestrutura.ServicosExternos.Servicos;
+using ApiRobustas.Logs.Servicos;
 using Microsoft.Extensions.Options;
 using System.Net.Http;
 using System.Text.Json;
@@ -17,14 +18,17 @@ namespace ApiRobustas.Infraestrutura.ServicosExternos.Externos
         private readonly ConfiguracoesBaseOptions _configuracoesBaseOpcao;
         private readonly IHttpClientFactory _ClienteHttp;
         private readonly IResilienciaServico _resilienciaServico;
+        private readonly ILogServico _logServico;
 
         public EnderecoServicoExterno(IHttpClientFactory clienteHttp,
                                       IResilienciaServico resilienciaServico,
+                                      ILogServico logServico,
                                       IOptionsMonitor<ConfiguracoesBaseOptions> opcoes)
         {
             _configuracoesBaseOpcao = opcoes.CurrentValue;
             _ClienteHttp = clienteHttp;
             _resilienciaServico = resilienciaServico;
+            _logServico = logServico;
         }
 
         private HttpRequestMessage MontarRequisicao(string cep)
@@ -46,6 +50,12 @@ namespace ApiRobustas.Infraestrutura.ServicosExternos.Externos
 
             var configuracoesDeResiliencia = _resilienciaServico.RetornarPoliticaDeTratamentoDeRequisicao();
 
+            #region Dados do log
+            _logServico.InformacaoLog.ExternalUri = requisicao.RequestUri.AbsoluteUri;
+            _logServico.InformacaoLog.ExternalQueryParams = cep;
+
+            #endregion
+
             await configuracoesDeResiliencia.ExecuteAsync(async () =>
             {
                 var resposta = await clienteExterno.SendAsync(requisicao);
@@ -54,6 +64,9 @@ namespace ApiRobustas.Infraestrutura.ServicosExternos.Externos
                 {
                     var retorno = await resposta.Content.ReadAsStringAsync();
                     endereco = JsonSerializer.Deserialize<EnderecoQuery>(retorno);
+
+                    _logServico.InformacaoLog.ExternalResponseBody = retorno;
+                    _logServico.InformacaoLog.ExternalStatusCode = (int)resposta.StatusCode;
                 }
             });
 

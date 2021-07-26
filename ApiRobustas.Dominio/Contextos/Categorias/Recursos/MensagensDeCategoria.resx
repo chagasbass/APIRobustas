@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DescricaoInvalida" xml:space="preserve">
-    <value />
+    <value>A descrição é Inválida</value>
   </data>
   <data name="DescricaoNaoPreenchida" xml:space="preserve">
-    <value />
+    <value>A descrição é obrigatória</value>
   </data>
   <data name="NomeInvalido" xml:space="preserve">
-    <value />
+    <value>O nome é inválido</value>
   </data>
   <data name="NomeNaoPreenchido" xml:space="preserve">
-    <value />
+    <value>O nome deve ser preenchido</value>
   </data>
 </root>

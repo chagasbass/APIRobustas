@@ -18,6 +18,9 @@ namespace ApiRobustas.Dominio.Contextos.Usuarios.Fluxos
         private readonly IUsuarioRepositorio _usuarioRepositorio;
         private readonly IEnderecoServicoDeDominio _enderecoServicoDeDominio;
 
+        private const string TITULO_ERRO = "Foram encontrados erros";
+        private const string TITULO_SUCESSO = "Usuário Cadastrado com sucesso";
+
         public CadastrarUsuarioFluxo(IUnidadeDeTrabalho unidadeDeTrabalho,
                                      IUsuarioRepositorio usuarioRepositorio,
                                      IEnderecoServicoDeDominio enderecoServicoDeDominio)
@@ -40,17 +43,23 @@ namespace ApiRobustas.Dominio.Contextos.Usuarios.Fluxos
             request.ValidarComando();
 
             if (!request.IsValid)
-                return new ComandoResultado(false, "Foram encontrados erros", request.Notifications);
+                return new ComandoResultado(false, TITULO_ERRO, request.Notifications);
 
             var usuarioExiste = _usuarioRepositorio.VerificarSeUsuarioExiste(request.Email);
 
             if (usuarioExiste)
             {
                 AddNotification("Usuário", "O usuário já está cadastrado.");
-                return new ComandoResultado(false, "Foram encontrados erros", this.Notifications);
+                return new ComandoResultado(false, TITULO_ERRO, this.Notifications);
             }
 
             var endereco = await _enderecoServicoDeDominio.BuscarEnderecoAsync(request.Cep);
+
+            if (endereco is null)
+            {
+                AddNotification("Cep", "O cep informado não existe");
+                return new ComandoResultado(false, TITULO_ERRO, this.Notifications);
+            }
 
             var nome = new Nome(request.Nome, request.Sobrenome);
 
@@ -58,7 +67,7 @@ namespace ApiRobustas.Dominio.Contextos.Usuarios.Fluxos
             novoUsuario.ValidarEntidade();
 
             if (!novoUsuario.IsValid)
-                return new ComandoResultado(false, "Foram encontrados erros", novoUsuario.Notifications);
+                return new ComandoResultado(false, TITULO_ERRO, novoUsuario.Notifications);
 
             novoUsuario.AlterarEndereco(endereco);
 
@@ -66,7 +75,7 @@ namespace ApiRobustas.Dominio.Contextos.Usuarios.Fluxos
 
             await _unidadeDeTrabalho.CommitAsync();
 
-            return new ComandoResultado(true, "Usuario Cadastrado com sucesso", novoUsuario.Id);
+            return new ComandoResultado(true, TITULO_SUCESSO, novoUsuario.Id);
         }
     }
 }

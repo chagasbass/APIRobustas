@@ -64,6 +64,8 @@ namespace ApiRobustas.Api
                 });
             }
 
+            app.UseMiddleware<SerilogRequestLoggerMiddleware>();
+
             app.UseCors(x =>
            x.AllowAnyOrigin()
           .AllowAnyMethod()

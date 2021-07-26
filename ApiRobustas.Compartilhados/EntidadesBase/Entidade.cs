@@ -27,21 +27,27 @@ namespace ApiRobustas.Compartilhados.EntidadesBase
         {
             var compareTo = obj as Entidade;
 
-            if (ReferenceEquals(this, compareTo)) return true;
-            if (ReferenceEquals(null, compareTo)) return false;
+            if (!ReferenceEquals(this, compareTo))
+            {
+                if (ReferenceEquals(null, compareTo)) return false;
 
-            return Id.Equals(compareTo.Id);
+                return Id.Equals(compareTo.Id);
+            }
+
+            return true;
         }
 
         public static bool operator ==(Entidade a, Entidade b)
         {
-            if (ReferenceEquals(a, null) && ReferenceEquals(b, null))
-                return true;
+            if (a is not null || !ReferenceEquals(b, null))
+            {
+                if (ReferenceEquals(a, null) || ReferenceEquals(b, null))
+                    return false;
 
-            if (ReferenceEquals(a, null) || ReferenceEquals(b, null))
-                return false;
+                return a.Equals(b);
+            }
 
-            return a.Equals(b);
+            return true;
         }
 
         /// <summary>

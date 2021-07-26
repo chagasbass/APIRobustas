@@ -24,6 +24,12 @@ namespace ApiRobustas.Api.HealthChecks
             _configuracoesBaseOptions = options.CurrentValue;
         }
 
+        /// <summary>
+        /// Checa a saúde dos serviços externos
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             var url = _configuracoesBaseOptions.ServicoCep.Replace("meu_cep", CEP);

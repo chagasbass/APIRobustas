@@ -1,4 +1,5 @@
 ﻿using ApiRobustas.Api.Middlewares;
+using ApiRobustas.Compartilhados.Saude;
 using ApiRobustas.Dominio.Contextos.Categorias.Fluxos;
 using ApiRobustas.Dominio.Contextos.Categorias.Repositorios;
 using ApiRobustas.Dominio.Contextos.Produtos.Fluxos;
@@ -18,6 +19,7 @@ using ApiRobustas.Infraestrutura.Data.UnidadesDeTrabalho;
 using ApiRobustas.Infraestrutura.ServicosExternos.Configuracoes;
 using ApiRobustas.Infraestrutura.ServicosExternos.Externos;
 using ApiRobustas.Infraestrutura.ServicosExternos.Servicos;
+using ApiRobustas.Logs.Servicos;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -36,6 +38,10 @@ namespace ApiRobustas.Api.Configuracoes
              *Transient ->  toda vez q tiver dependencia é criado novamente
              *Sigleton -> Uma única vez até a aplicação morrer
              */
+
+            //servico de log
+            services.AddSingleton<ILogServico, LogServico>();
+            services.AddSingleton<InformacaoLog>();
 
             //servicos de autenticacao
             services.AddScoped<ITokenServico, TokenServico>();
