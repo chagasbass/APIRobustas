@@ -17,31 +17,33 @@ namespace ApiRobustas.Infraestrutura.Logs.Servicos
 
         public void EscreverLog()
         {
-            _logger.Information($"[TimeStamp]:{InformacaoLog.Timestamp}");
-            _logger.Information($"[IpAddress]:{InformacaoLog.IpAddress.ToString()} ?? Não informado");
-            _logger.Information($"[Usuario]: {InformacaoLog.Usuario ?? "Usuário não está logado."}");
-            _logger.Information($"[ExternalUri]: { InformacaoLog.ExternalUri ?? "Sem Uri"}");
-            _logger.Information($"[Endpoint]: { InformacaoLog.Endpoint}");
-            _logger.Information($"[Controller]: { InformacaoLog.Controller}");
-            _logger.Information($"[RequestQueryParams]: { InformacaoLog.RequestQueryParams ?? "Sem parametros"}");
-            _logger.Information($"[ExternalRequestBody]: { InformacaoLog.ExternalRequestBody ?? "Sem body na requisição externa"}");
-            _logger.Information($"[ExternalQueryParams]: { InformacaoLog.ExternalQueryParams ?? "Sem parâmetros na requisição externa"}");
-            _logger.Information($"[ExternalResponseBody]: { InformacaoLog.ExternalResponseBody ?? "Sem body na response externa"}");
-            _logger.Information($"[RequestBody]: { InformacaoLog.RequestBody ?? "Requisição sem body"}");
-            _logger.Information($"[ResponseBody]: { InformacaoLog.ResponseBody}");
-            _logger.Information($"[Response information] {InformacaoLog.Method}");
-            _logger.Information($"[StatusCode]: {InformacaoLog.ResponseStatusCode}");
-            _logger.Information($"[TraceId]:{InformacaoLog.TraceId}");
-            _logger.Information($"[RequestUriParams]:{InformacaoLog.RequestQueryParams}");
+            _logger.ForContext("[TimeStamp]:", InformacaoLog.Timestamp)
+                   .ForContext("[IpAddress]:", InformacaoLog.IpAddress.ToString() ?? "Não informado")
+                   .ForContext("[Usuario]:", InformacaoLog.Usuario ?? "Usuário não está logado.")
+                   .ForContext("[ExternalUri]:", InformacaoLog.ExternalUri ?? "Sem Uri")
+                   .ForContext("[Endpoint]: ", InformacaoLog.Endpoint)
+                   .ForContext("[Controller]:", InformacaoLog.Controller)
+                   .ForContext("[RequestQueryParams]:", InformacaoLog.RequestQueryParams ?? "Sem parametros")
+                   .ForContext("[ExternalRequestBody]:", InformacaoLog.ExternalRequestBody ?? "Sem body na requisição externa")
+                   .ForContext("[ExternalQueryParams]: ", InformacaoLog.ExternalQueryParams ?? "Sem parâmetros na requisição externa")
+                   .ForContext("[ExternalResponseBody]: ", InformacaoLog.ExternalResponseBody ?? "Sem body na response externa")
+                   .ForContext("[RequestBody]:", InformacaoLog.RequestBody ?? "Requisição sem body")
+                   .ForContext("[ResponseBody]:", InformacaoLog.ResponseBody)
+                   .ForContext("[Response information]", InformacaoLog.Method)
+                   .ForContext("[StatusCode]: ", InformacaoLog.ResponseStatusCode)
+                   .ForContext("[TraceId]:", InformacaoLog.TraceId)
+                   .ForContext("[RequestUriParams]:", InformacaoLog.RequestQueryParams)
+                   .Information("Log da Aplicação");
         }
 
         public void EscreverLogDeErros(Exception exception)
         {
-            _logger.Error($"[Exception]:{exception.GetType().Name}");
-            _logger.Error($"[Message]:{exception.Message}");
-            _logger.Error($"[ExceptionStackTrace]:{exception.StackTrace}");
-            _logger.Error($"[InnerException]:{exception?.InnerException.Message}");
-            _logger.Error($"[Stack Chamadas]:{Environment.StackTrace }");
+            _logger.ForContext("[Exception]:", exception.GetType().Name)
+                   .ForContext("[Message]:", exception.Message)
+                   .ForContext("[ExceptionStackTrace]:", exception.StackTrace)
+                   .ForContext("[InnerException]:", exception?.InnerException?.Message)
+                   .ForContext("[Stack Chamadas]:", Environment.StackTrace)
+                   .Error("Log da Aplicação");
         }
     }
 }

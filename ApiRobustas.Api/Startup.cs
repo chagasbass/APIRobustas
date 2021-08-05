@@ -81,7 +81,6 @@ namespace ApiRobustas.Api
             app.UseHealthChecks();
             app.UserHealthCheckUi();
 
-            //app.UseRequestLogConfiguration();
             app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>

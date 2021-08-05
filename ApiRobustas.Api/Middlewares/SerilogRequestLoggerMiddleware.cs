@@ -15,7 +15,6 @@ namespace ApiRobustas.Api.Middlewares
     /// </summary>
     public class SerilogRequestLoggerMiddleware
     {
-
         private readonly RequestDelegate _next;
         private readonly ILogServico _logServico;
         private readonly IDiagnosticContext _diagnosticContext;
@@ -40,15 +39,15 @@ namespace ApiRobustas.Api.Middlewares
         public async Task InvokeAsync(HttpContext context)
         {
             //efetuando a leitura do request pois ele vem como um stream.
-            string requestBody = await GetRequestBodyAsync(context);
+            string requestBody = await RecuperarRequestBodyAsync(context);
 
             var originalResponseBodyReference = context.Response.Body;
 
             using var responseBodyMemoryStream = new MemoryStream();
 
-            var responseBody = await GetResponseBodyAsync(context, responseBodyMemoryStream);
+            var responseBody = await RecuperarResponseBodyAsync(context, responseBodyMemoryStream);
 
-            CreateLogInformation(requestBody, responseBody, context);
+            CriarInformacoesDeLog(requestBody, responseBody, context);
 
             await responseBodyMemoryStream.CopyToAsync(originalResponseBodyReference);
         }
@@ -58,7 +57,7 @@ namespace ApiRobustas.Api.Middlewares
         /// </summary>
         /// <param name="httpContext"></param>
         /// <returns></returns>
-        private async Task<string> GetRequestBodyAsync(HttpContext httpContext)
+        private async Task<string> RecuperarRequestBodyAsync(HttpContext httpContext)
         {
             HttpRequestRewindExtensions.EnableBuffering(httpContext.Request);
             Stream body = httpContext.Request.Body;
@@ -78,7 +77,7 @@ namespace ApiRobustas.Api.Middlewares
         /// <param name="httpContext"></param>
         /// <param name="responseBodyMemoryStream"></param>
         /// <returns></returns>
-        private async Task<string> GetResponseBodyAsync(HttpContext httpContext, MemoryStream responseBodyMemoryStream)
+        private async Task<string> RecuperarResponseBodyAsync(HttpContext httpContext, MemoryStream responseBodyMemoryStream)
         {
             httpContext.Response.Body = responseBodyMemoryStream;
 
@@ -97,9 +96,9 @@ namespace ApiRobustas.Api.Middlewares
         /// <param name="requestBody"></param>
         /// <param name="responseBody"></param>
         /// <param name="httpContext"></param>
-        private void CreateLogInformation(string requestBody, string responseBody, HttpContext httpContext)
+        private void CriarInformacoesDeLog(string requestBody, string responseBody, HttpContext httpContext)
         {
-            GetRequestQueryParams(httpContext);
+            RecuperarQueryParamsDoRequest(httpContext);
 
             var endpoint = httpContext.GetEndpoint();
             if (endpoint != null)
@@ -120,7 +119,7 @@ namespace ApiRobustas.Api.Middlewares
         /// Recupera os parametros de rota da aplicação
         /// </summary>
         /// <param name="context"></param>
-        private void GetRequestQueryParams(HttpContext context)
+        private void RecuperarQueryParamsDoRequest(HttpContext context)
         {
             var queryParams = context.GetRouteData();
 

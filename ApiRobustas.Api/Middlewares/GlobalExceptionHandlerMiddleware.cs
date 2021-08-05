@@ -49,9 +49,10 @@ namespace ApiRobustas.Api.Middlewares
             var detalhesDoProblema = new DetalhesDoProblema()
             {
                 Titulo = "Um erro ocorreu ao processar o request.",
-                CodigoHttp = statusCode,
-                Detalhe = $"Erro fatal na aplicação,entre em contato com um Desenvolvedor responsável.",
-                Instancia = exception.Message
+                Status = statusCode,
+                Tipo = exception.GetBaseException().GetType().Name,
+                Detalhe = $"Erro fatal na aplicação,entre em contato com um Desenvolvedor responsável. Causa: {exception.Message}",
+                Instancia = context.Request.HttpContext.Request.Path
             };
 
             _logServico.EscreverLogDeErros(exception);

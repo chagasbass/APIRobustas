@@ -27,6 +27,8 @@ namespace ApiRobustas.Api.Controllers.Contextos.Categorias
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IComandoResultado>> ListarCategoriasAsync([FromServices] ICategoriaQueryRepositorio _categoriaQueryRepositorio)
         {
+            throw new OutOfMemoryException("deu ruim mesmo");
+
             var comandoResultado = new ComandoResultado
             {
                 Data = await _categoriaQueryRepositorio.ListarCategoriasAsync()

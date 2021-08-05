@@ -6,7 +6,7 @@
     public class DetalhesDoProblema
     {
         public string Titulo { get; set; }
-        public int CodigoHttp { get; set; }
+        public int Status { get; set; }
         public string Detalhe { get; set; }
         public string Tipo { get; set; }
         public string Instancia { get; set; }
