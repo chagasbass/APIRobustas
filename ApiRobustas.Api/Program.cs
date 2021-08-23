@@ -20,6 +20,7 @@ namespace ApiRobustas.Api
 
         public static int Main(string[] args)
         {
+            //Log Simples
             //Log.Logger = new LoggerConfiguration()
             // .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             // .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
@@ -70,32 +71,15 @@ namespace ApiRobustas.Api
             return new LoggerConfiguration()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Information)
-            .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Error)
             .Enrich.FromLogContext()
             .Filter.ByExcluding(c => c.Properties.Any(p => p.Value.ToString().Contains("healthcheck")))
             .Filter.ByExcluding(c => c.Properties.Any(p => p.Value.ToString().Contains("healthcheck-ui")))
             .Filter.ByExcluding(c => c.Properties.Any(p => p.Key.ToString().Contains("HealthChecksDb")))
             .Filter.ByExcluding(c => c.Properties.Any(p => p.Key.ToString().Contains("HealthChecksUI")))
             .Filter.ByExcluding(c => c.Properties.Any(p => p.Key.ToString().Contains("healthchecks-data-ui")))
-            .WriteTo.Console()
             .WriteTo.Seq(Environment.GetEnvironmentVariable("SEQ_URL") ?? LogServerUrl)
+            .WriteTo.Console()
             .CreateLogger();
-
-            //var logger = new LoggerConfiguration()
-            //    .ReadFrom.Configuration(_configurationForLogging)
-            //    .MinimumLevel.Debug()
-            //    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-            //    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Information)
-            //    .Enrich.FromLogContext()
-            //    .Enrich.WithMachineName()
-            //    .Filter.ByExcluding(c => c.Properties.Any(p => p.Value.ToString().Contains("healthcheck")))
-            //    .Filter.ByExcluding(c => c.Properties.Any(p => p.Value.ToString().Contains("healthcheck-ui")))
-            //    .Filter.ByExcluding(c => c.Properties.Any(p => p.Key.ToString().Contains("HealthChecksDb")))
-            //    .Filter.ByExcluding(c => c.Properties.Any(p => p.Key.ToString().Contains("HealthChecksUI")))
-            //    .Filter.ByExcluding(c => c.Properties.Any(p => p.Key.ToString().Contains("healthchecks-data-ui")))
-            //    .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Information)
-            //    .Enrich.WithProperty("Environment", ENVIRONMENT)
-            //    .WriteTo.Seq(Environment.GetEnvironmentVariable("SEQ_URL") ?? LogServerUrl);
         }
     }
 }

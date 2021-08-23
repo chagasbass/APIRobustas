@@ -51,8 +51,10 @@ namespace ApiRobustas.Infraestrutura.ServicosExternos.Externos
             var configuracoesDeResiliencia = _resilienciaServico.RetornarPoliticaDeTratamentoDeRequisicao();
 
             #region Dados do log
-            _logServico.InformacaoLog.ExternalUri = requisicao.RequestUri.AbsoluteUri;
-            _logServico.InformacaoLog.ExternalQueryParams = cep;
+            _logServico.InformacaoLog.InformacaoExternaLog.InserirInformacaoExterna(true);
+            _logServico.InformacaoLog.InformacaoExternaLog.InserirRequestMethod(requisicao.Method.Method)
+                                     .InserirExternalRequestUri(requisicao.RequestUri.AbsoluteUri)
+                                     .InserirRequestParams(cep);
 
             #endregion
 
@@ -65,8 +67,8 @@ namespace ApiRobustas.Infraestrutura.ServicosExternos.Externos
                     var retorno = await resposta.Content.ReadAsStringAsync();
                     endereco = JsonSerializer.Deserialize<EnderecoQuery>(retorno);
 
-                    _logServico.InformacaoLog.ExternalResponseBody = retorno;
-                    _logServico.InformacaoLog.ExternalStatusCode = (int)resposta.StatusCode;
+                    _logServico.InformacaoLog.InformacaoExternaLog.InserirResponseBody(retorno)
+                                                                  .InserirResponseStatusCode((int)resposta.StatusCode);
                 }
             });
 

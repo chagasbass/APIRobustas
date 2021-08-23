@@ -44,28 +44,18 @@ namespace ApiRobustas.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
+            app.UseResponseCaching();
             app.UseResponseCompression();
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-
-                // app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiRobustas.Api v1"));
-
-                //Add as versões existentes dos endpoints no swagger
-                app.UseSwaggerUI(options =>
-                {
-                    foreach (var description in provider.ApiVersionDescriptions)
-                    {
-                        options.SwaggerEndpoint(
-                            $"/swagger/{description.GroupName}/swagger.json",
-                            description.GroupName.ToUpperInvariant());
-                    }
-                });
+                app.UseSwaggerUIMultipleVersions(provider);
             }
 
             app.UseMiddleware<SerilogRequestLoggerMiddleware>();
+            app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
             app.UseCors(x =>
            x.AllowAnyOrigin()
@@ -75,13 +65,27 @@ namespace ApiRobustas.Api
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            #region verificar esse cara aqui
+
+            //app.Use(async (context, next) =>
+            //{
+            //    await next();
+
+            //    if (context.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
+            //    {
+            //        var comandoResultado = new ComandoResultado(false, "Acesso negado!");
+
+            //        await context.Response.WriteAsync(JsonSerializer.Serialize(comandoResultado));
+            //    }
+            //});
+
+            #endregion
+
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseHealthChecks();
             app.UserHealthCheckUi();
-
-            app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

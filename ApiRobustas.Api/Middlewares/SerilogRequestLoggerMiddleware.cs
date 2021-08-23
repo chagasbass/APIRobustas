@@ -66,8 +66,11 @@ namespace ApiRobustas.Api.Middlewares
             await httpContext.Request.Body.ReadAsync(buffer, 0, buffer.Length);
 
             var requestBody = Encoding.UTF8.GetString(buffer);
+
             body.Seek(0, SeekOrigin.Begin);
+
             httpContext.Request.Body = body;
+
             return requestBody;
         }
 
@@ -84,7 +87,9 @@ namespace ApiRobustas.Api.Middlewares
             await _next(httpContext);
 
             httpContext.Response.Body.Seek(0, SeekOrigin.Begin);
+
             var responseBody = await new StreamReader(httpContext.Response.Body).ReadToEndAsync();
+
             httpContext.Response.Body.Seek(0, SeekOrigin.Begin);
 
             return responseBody;
@@ -102,15 +107,15 @@ namespace ApiRobustas.Api.Middlewares
 
             var endpoint = httpContext.GetEndpoint();
             if (endpoint != null)
-                _logServico.InformacaoLog.Endpoint = endpoint.DisplayName;
+                _logServico.InformacaoLog.InserirEndpoint(endpoint.DisplayName);
 
-            _logServico.InformacaoLog.IpAddress = httpContext.Connection.RemoteIpAddress?.ToString() ?? "Ip não informado";
-            _logServico.InformacaoLog.Method = httpContext.Request.Method;
-            _logServico.InformacaoLog.RequestUri = httpContext.GetEndpoint()?.DisplayName ?? "";
-            _logServico.InformacaoLog.RequestBody = requestBody ?? "Requisição sem body";
-            _logServico.InformacaoLog.ResponseBody = responseBody;
-            _logServico.InformacaoLog.TraceId = httpContext.TraceIdentifier;
-            _logServico.InformacaoLog.Usuario = httpContext.User.Identity.Name;
+            _logServico.InformacaoLog.InserirIp(httpContext.Connection.RemoteIpAddress?.ToString())
+            .InserirRequestMethod(httpContext.Request.Method)
+            .InserirRequestUri(httpContext.GetEndpoint()?.DisplayName)
+            .InserirRequestBody(requestBody)
+            .InserirResponseBody(responseBody)
+            .InserirTraceId(httpContext.TraceIdentifier)
+            .InserirUsuario(httpContext.User.Identity.Name);
 
             _logServico.EscreverLog();
         }
@@ -128,10 +133,17 @@ namespace ApiRobustas.Api.Middlewares
 
             var values = queryParams.Values.ToList();
 
-            _logServico.InformacaoLog.Controller = $"{values[1].Key} - {values[1].Value}";
+            _logServico.InformacaoLog.InserirController($"{values[1].Key} - {values[1].Value}");
 
             if (values.Count > 2)
-                _logServico.InformacaoLog.RequestQueryParams = $"{values[2].Key} - {values[2].Value}";
+            {
+                var paramsValue = new StringBuilder();
+
+                for (int i = 2; i < values.Count; i++)
+                    paramsValue.AppendLine($"params: {values[i].Key} value: {values[i].Value}");
+
+                _logServico.InformacaoLog.InserirRequestQueryParams(paramsValue.ToString());
+            }
         }
     }
 }

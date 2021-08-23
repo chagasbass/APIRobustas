@@ -1,4 +1,6 @@
-﻿using ApiRobustas.Compartilhados.ComandosBase;
+﻿using ApiRobustas.Api.Controllers.Base;
+using ApiRobustas.Compartilhados.ComandosBase;
+using ApiRobustas.Compartilhados.Enumeradores;
 using ApiRobustas.Dominio.Contextos.Categorias.Comandos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -12,13 +14,14 @@ namespace ApiRobustas.Api.Controllers.Contextos.Categorias
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
-    public class CategoriaController : ControllerBase
+    public class CategoriaController : ApiRobustasController
     {
         private readonly IMediator _mediator;
 
         public CategoriaController(IMediator mediator)
         {
             _mediator = mediator;
+            InserirRotaDefault("v1/categorias");
         }
 
         /// <summary>
@@ -33,7 +36,7 @@ namespace ApiRobustas.Api.Controllers.Contextos.Categorias
         {
             var comandoResultado = await _mediator.Send(criarCategoriaComando);
 
-            return Created("v1/categorias", comandoResultado);
+            return TratarRequisicao(comandoResultado, EStatusCode.Post);
         }
     }
 }

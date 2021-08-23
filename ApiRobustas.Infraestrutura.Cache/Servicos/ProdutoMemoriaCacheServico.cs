@@ -15,7 +15,6 @@ namespace ApiRobustas.Infraestrutura.Cache.Servicos
         private readonly IProdutoQueryRepositorio _produtoQueryRepositorio;
         private readonly ConfiguracoesDeCacheOptions _configuracoesDeCache;
 
-
         public ProdutoMemoriaCacheServico(IMemoryCache memoryCache,
                                           IProdutoQueryRepositorio produtoQueryRepositorio,
                                           IOptionsMonitor<ConfiguracoesDeCacheOptions> opcoes)

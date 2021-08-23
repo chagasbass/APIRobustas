@@ -1,4 +1,5 @@
-﻿using ApiRobustas.Compartilhados.ComandosBase;
+﻿using ApiRobustas.Api.Controllers.Base;
+using ApiRobustas.Compartilhados.ComandosBase;
 using ApiRobustas.Dominio.Contextos.Usuarios.Comandos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -16,7 +17,7 @@ namespace ApiRobustas.Api.Controllers.Contextos.Usuarios
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
-    public class LoginController : ControllerBase
+    public class LoginController : ApiRobustasController
     {
         private readonly IMediator _mediator;
 

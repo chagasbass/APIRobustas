@@ -1,4 +1,6 @@
-﻿using ApiRobustas.Compartilhados.ComandosBase;
+﻿using ApiRobustas.Api.Controllers.Base;
+using ApiRobustas.Compartilhados.ComandosBase;
+using ApiRobustas.Compartilhados.Enumeradores;
 using ApiRobustas.Dominio.Contextos.Usuarios.Comandos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -15,13 +17,14 @@ namespace ApiRobustas.Api.Controllers.Contextos.Usuarios
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
-    public class UsuarioController : ControllerBase
+    public class UsuarioController : ApiRobustasController
     {
         private readonly IMediator _mediator;
 
         public UsuarioController(IMediator mediator)
         {
             _mediator = mediator;
+            InserirRotaDefault("v1/usuarios");
         }
 
         /// <summary>
@@ -38,10 +41,7 @@ namespace ApiRobustas.Api.Controllers.Contextos.Usuarios
         {
             var comandoResultado = (ComandoResultado)await _mediator.Send(cadastrarUsuarioComando);
 
-            if (!comandoResultado.Sucesso)
-                return BadRequest(comandoResultado);
-
-            return Created("v1/usuarios", comandoResultado);
+            return TratarRequisicao(comandoResultado, EStatusCode.Post);
         }
     }
 }

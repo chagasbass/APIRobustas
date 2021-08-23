@@ -1,5 +1,8 @@
-﻿using ApiRobustas.Compartilhados.ComandosBase;
+﻿using ApiRobustas.Api.Controllers.Base;
+using ApiRobustas.Compartilhados.ComandosBase;
+using ApiRobustas.Compartilhados.Enumeradores;
 using ApiRobustas.Dominio.Contextos.Categorias.Repositorios;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,29 +18,26 @@ namespace ApiRobustas.Api.Controllers.Contextos.Categorias
     [Route("v1/categorias")]
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1")]
-    public class CategoriaListagemController : ControllerBase
+    public class CategoriaListagemController : ApiRobustasController
     {
         /// <summary>
         /// Efetua a listagem das categorias
         /// </summary>
         [HttpGet("")]
         [MapToApiVersion("1.0")]
+        [Authorize]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ComandoResultado), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IComandoResultado>> ListarCategoriasAsync([FromServices] ICategoriaQueryRepositorio _categoriaQueryRepositorio)
         {
-            throw new OutOfMemoryException("deu ruim mesmo");
-
             var comandoResultado = new ComandoResultado
             {
                 Data = await _categoriaQueryRepositorio.ListarCategoriasAsync()
             };
 
-            if (comandoResultado.Data is null)
-                return NotFound();
-
-            return Ok(comandoResultado);
+            return TratarRequisicao(comandoResultado, EStatusCode.Get);
         }
 
         /// <summary>
@@ -56,10 +56,7 @@ namespace ApiRobustas.Api.Controllers.Contextos.Categorias
                 Data = await _categoriaQueryRepositorio.ListarCategoriasAsync(id)
             };
 
-            if (comandoResultado.Data is null)
-                return NotFound();
-
-            return Ok(comandoResultado);
+            return TratarRequisicao(comandoResultado, EStatusCode.Get);
         }
     }
 }
